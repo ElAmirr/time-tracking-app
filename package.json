@@ -1,0 +1,24 @@
+{
+  "name": "time-tracking-app",
+  "version": "1.0.0",
+  "description": "time-tracking-app",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ElAmirr/time-tracking-app.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ElAmirr/time-tracking-app/issues"
+  },
+  "homepage": "https://github.com/ElAmirr/time-tracking-app#readme",
+  "dependencies": {
+    "express": "^4.19.2",
+    "sqlite3": "^5.1.7"
+  }
+}
