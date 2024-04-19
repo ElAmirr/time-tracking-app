@@ -13,6 +13,7 @@ app.use(express.static(publicPath));
 
 // Hardcoded usernames and passwords
 const users = [
+  { username: '1224', password: '12241224', role: 'operator'},
   { username: 'operator', password: 'operator123', role: 'operator' },
   { username: 'admin', password: 'admin123', role: 'admin' }
 ];
@@ -36,7 +37,7 @@ app.post('/login', (req, res) => {
   const { username, password } = req.body;
   const user = users.find(user => user.username === username && user.password === password);
   if (user) {
-    res.json({ success: true, message: 'Login successful', role: user.role });
+    res.json({ success: true, message: 'Login successful', username: user.username, role: user.role });
   } else {
     res.status(401).json({ success: false, message: 'Invalid username or password' });
   }

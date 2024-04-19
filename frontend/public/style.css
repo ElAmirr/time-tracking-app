@@ -1,0 +1,210 @@
+/* Body styles */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f8f9fa;
+    color: #fff;
+}
+
+header {
+    background-color: #333333;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.user-details-container {
+    width: 80%;
+    display: flex;
+    justify-content: space-between;
+    border: 2px solid #555555;
+    padding: 10px 20px;
+    margin-top: 20px;
+    border-radius: 5px;
+}
+
+.timer-control-container {
+    width: 80%;
+    display: flex;
+    justify-content: space-between;
+    margin: 20px 0;
+}
+
+.form-switch {
+    display: flex;
+    align-items: center;
+}
+
+/* Unchecked state */
+.form-check-input[type="checkbox"]:checked {
+    background-color: green;
+    border-color: green;
+}
+
+/* Checked state */
+.form-check-input[type="checkbox"]:not(:checked) {
+    background-color: #555555;
+    border-color: #555555;
+}
+
+/* Slider appearance */
+.form-check-input[type="checkbox"] {
+width: 50px; /* Adjust width as needed */
+height: 25px; /* Adjust height as needed */
+border-radius: 15px; /* Adjust border radius for rounded corners */
+transition: background-color 0.3s, border-color 0.3s; /* Smooth transition */
+}
+
+/* Custom styling for the switch label */
+.form-check-label {
+    margin-left: 20px;
+}
+
+.stop-reason-pop-up {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    justify-content: center;
+    align-items: center;
+}
+
+.stop-reason-pop-up.is-active {
+    display: flex;
+}
+
+.stop-reson-pop-up-content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #fff;
+    padding: 20px;
+}
+
+.stop-reson-pop-up-close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    border: none;
+    background: transparent;
+    font-size: 20px;
+    cursor: pointer;
+    color: #fff;
+}
+
+/* Form styles */
+.form-label {
+    font-weight: bold;
+}
+
+.form-select {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.custom-reason-input {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+/* Stopwatch styles */
+.table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.table th, .table td {
+    padding: 8px;
+    border-bottom: 1px solid #ddd;
+}
+
+.table th {
+    background-color: #f2f2f2;
+    font-weight: bold;
+    text-align: left;
+}
+.container.mt-4 {
+top: 30%;
+bottom: 30%;
+
+}
+
+.bottom-bar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background-color: #f0f0f0;
+    padding: 10px 0;
+    z-index: 999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: transform 0.3s ease; /* Smooth transition for opening and closing */
+    will-change: transform; /* Optimize for smoother animation */
+}
+
+.bottom-bar.open {
+    transform: translateY(60px); /* Move the bar up when open */
+}
+
+/* Toggle button */
+.toggle-button {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    outline: none;
+    padding: 0;
+    margin-top: -20px; /* Adjust margin to align with the table */
+}
+
+.toggle-icon {
+    width: 30px;
+    height: auto;
+    fill: #007bff;
+    transition: transform 0.3s ease; /* Smooth transition for icon rotation */
+}
+
+.toggle-icon.open {
+    transform: rotate(180deg); /* Rotate the arrow icon when the table is open */
+}
+
+/* Excel table */
+.excel-table {
+    position: fixed;
+    bottom: -500px; /* Initial position */
+    left: 0;
+    width: 100%;
+    max-height: 400px; /* Adjust max height as needed */
+    overflow-y: auto;
+    transition: bottom 0.3s ease; /* Smoother transition */
+    backface-visibility: hidden; /* Enable hardware acceleration */
+    will-change: transform; /* Optimize for smoother animation */
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    z-index: 998; /* Below the bottom bar */
+}
+
+.excel-table.open {
+    bottom: 60px; /* Display table just above the bottom bar when open */
+}
+
+#pieChartContainer,
+#columnChartContainer {
+    margin-top: 20px;
+}
+
+.chart-container {
+    margin-bottom: 20px;
+}

@@ -3,9 +3,95 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>operator dashboard</title>
+    <title>Downtime Calculator</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <link rel="stylesheet" href="style2.css">
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <h1>Operator Dashboard</h1>
+    <header>
+        <div class="user-details-container">
+            <div class="user-container">
+                <p id="user-name"></p>
+                <p id="user-role"></p>
+            </div>
+            <div class="date-time">
+                <p id="currentTime"></p>
+                <p id="currentDate"></p>
+            </div>
+        </div>
+        <div class="timer-control-container">
+            <div class="slide-button-container">
+                <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" role="switch" id="toggleWorkState" onclick="toggleWorkState()">
+                    <label class="form-check-label" for="toggleWorkState">Pause Work</label>
+                </div>
+            </div>
+            <div id="stopwatch">00:00:00</div>
+        </div>
+    </header>
+    <div class="stop-reason-pop-up" id="pop-up">
+        <button class="stop-reson-pop-up-close is-large" aria-label="close" onclick="closeFormReason()">X</button>
+        <form onsubmit="submitStopReason(event)">
+            <div class="mb-3">
+                <label for="stopReason" class="form-label">Stop Reason:</label>
+                <select class="form-select" id="stopReason" name="stopReason">
+                    <option value="" disabled selected>Select or Type Reason</option>
+                    <option value="Problèmes techniques avec la machine">Problèmes techniques avec la machine</option>
+                    <option value="Pénuries de matériaux">Pénuries de matériaux</option>
+                    <option value="Maintenance">Maintenance</option>
+                    <option value="interruptions dans le flux de travail">interruptions dans le flux de travail</option>
+                    <option value="Préoccupations en matière de sécurité.">Préoccupations en matière de sécurité.</option>
+                    <option value="Controles de Qualité">Controles de Qualité</option>
+                    <option value="Facteurs environnementaux">Facteurs environnementaux</option>
+                    <option value="Erreur humaines">Erreur humaines</option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <textarea class="form-control custom-reason-input" id="customReason" placeholder="Type Custom Reason"></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+    </div>
+    <div class="bottom-bar">
+        <button class="toggle-button" onclick="toggleBottomBar()">
+            <svg class="toggle-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                <path d="M7 10l5 5 5-5z"/>
+                <path fill="none" d="M0 0h24v24H0z"/>
+            </svg>
+            <span class="visually-hidden">Show/Hide Details</span>
+        </button>
+        <div class="excel-table" id="excelTable">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Temp d'arret</th>
+                        <th>Durée d'arret</th>
+                        <th>Reason d'arret</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody id="stoppageLogTable">
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col-md-6">
+                <div id="pieChartContainer" class="chart-container">
+                    <canvas id="pieChart" width="400" height="400"></canvas>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div id="columnChartContainer" class="chart-container">
+                    <canvas id="columnChart" width="400" height="400"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="./operator_dashboard.js"></script>
 </body>
 </html>

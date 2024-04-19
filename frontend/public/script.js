@@ -23,6 +23,10 @@ document.addEventListener('DOMContentLoaded', function () {
         .then(data => {
             // Check if login was successful
             if (data.success) {
+                // save the operator in the local storage
+                localStorage.setItem('name', data.username)
+                localStorage.setItem('role', data.role);
+
                 // Redirect to the appropriate page based on the user role
                 if (data.role === 'admin') {
                     window.location.href = '/admin_dashboard';
@@ -38,4 +42,5 @@ document.addEventListener('DOMContentLoaded', function () {
             console.error('Error:', error);
         });
     });
+
 });
