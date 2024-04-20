@@ -154,8 +154,16 @@ function updateStoppageLogTable() {
         `;
         stoppageLogTable.appendChild(row);
 
-        // Prepare the data to send
-        const stoppageData = {
+        // send data to db
+        let stoppageData = {
+            timeOfStop: '',
+            duration: '',
+            reason: '',
+            customReasonText: ''
+        };
+
+        // Update the stoppageData object
+        stoppageData = {
             timeOfStop: entry.timeOfStop,
             duration: entry.duration,
             reason: entry.reason,
@@ -363,13 +371,6 @@ function toggleBottomBar() {
     }
 }
 
-// send data to db
-const stoppageData = {
-    timeOfStop: '12:00 PM',
-    duration: '00:05:30',
-    reason: 'Technical issues',
-    customReasonText: 'Machine malfunction'
-};
 
 fetch('/logStoppage', {
     method: 'POST',
