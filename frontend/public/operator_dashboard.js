@@ -88,12 +88,16 @@ function submitStopReason(event) {
     }            
 }
 // timer code
+// In the startStopwatch() function
 function startStopwatch() {
-    stopwatchInterval = setInterval(updateStopwatch, 1000) //update every seconds
+  stopwatchInterval = setInterval(updateStopwatch, 1000);
+  document.getElementById('stopwatch').classList.add('blink');
 }
 
+// In the stopStopwatch() function
 function stopStopwatch() {
-    clearInterval(stopwatchInterval);
+  clearInterval(stopwatchInterval);
+  document.getElementById('stopwatch').classList.remove('blink');
 }
 
 function updateStopwatch() {
@@ -186,35 +190,100 @@ function renderCharts() {
 }
 
 function renderPieChart(stoppagePercentage) {
-    // Render pie chart
+    // Render doughnut chart
     const ctx = document.getElementById('pieChart').getContext('2d');
     const workPercentage = 100 - stoppagePercentage;
 
     if (!pieChartInstance) {
         pieChartInstance = new Chart(ctx, {
-            type: 'pie',
+            type: 'doughnut',
             data: {
-                labels: ['Downtime', 'Prod-Time'],
+                labels: [], // Remove labels
                 datasets: [{
                     data: [stoppagePercentage, workPercentage],
-                    backgroundColor: ['#ff6347', '#7fff00'],
+                    backgroundColor: ['#e53935', '#7fff00'],
+                    hoverBackgroundColor: ['#c62828', '#6cdc00'],
+                    borderWidth: 0,
                 }]
             },
             options: {
                 title: {
-                    display: true,
-                    text: 'Stoppage vs Work Percentage',
-                    fontSize: 20,
+                    display: false, // Hide the chart title
                 },
                 legend: {
-                    position: 'bottom',
+                    display: false, // Disable the default legend
                 },
+                cutoutPercentage: 60, // Adjust the size of the hole in the doughnut
+                responsive: true,
+                maintainAspectRatio: true, // Set to true to maintain aspect ratio
             }
         });
+
+        // Create custom legend elements
+        const legendContainer = document.createElement('div');
+        legendContainer.classList.add('custom-legend');
+
+        const downtimeItem = document.createElement('div');
+        downtimeItem.classList.add('legend-item');
+        downtimeItem.addEventListener('click', () => {
+            pieChartInstance.data.datasets[0].backgroundColor = ['#e53935', '#ccc'];
+            pieChartInstance.update();
+        });
+
+        const downtimeCircle = document.createElement('span');
+        downtimeCircle.classList.add('legend-circle');
+        downtimeCircle.style.backgroundColor = '#e53935';
+
+        const downtimeText = document.createElement('span');
+        downtimeText.classList.add('legend-text');
+        downtimeText.textContent = 'Downtime';
+
+        const downtimePercentage = document.createElement('span');
+        downtimePercentage.classList.add('legend-percentage');
+        downtimePercentage.textContent = `${stoppagePercentage.toFixed(2)}%`;
+
+        downtimeItem.appendChild(downtimeCircle);
+        downtimeItem.appendChild(downtimeText);
+        downtimeItem.appendChild(downtimePercentage);
+
+        const prodTimeItem = document.createElement('div');
+        prodTimeItem.classList.add('legend-item');
+        prodTimeItem.addEventListener('click', () => {
+            pieChartInstance.data.datasets[0].backgroundColor = ['#ccc', '#7fff00'];
+            pieChartInstance.update();
+        });
+
+        const prodTimeCircle = document.createElement('span');
+        prodTimeCircle.classList.add('legend-circle');
+        prodTimeCircle.style.backgroundColor = '#7fff00';
+
+        const prodTimeText = document.createElement('span');
+        prodTimeText.classList.add('legend-text');
+        prodTimeText.textContent = 'Prod-Time';
+
+        const prodTimePercentage = document.createElement('span');
+        prodTimePercentage.classList.add('legend-percentage');
+        prodTimePercentage.textContent = `${workPercentage.toFixed(2)}%`;
+
+        prodTimeItem.appendChild(prodTimeCircle);
+        prodTimeItem.appendChild(prodTimeText);
+        prodTimeItem.appendChild(prodTimePercentage);
+
+        legendContainer.appendChild(downtimeItem);
+        legendContainer.appendChild(prodTimeItem);
+
+        const pieChartContainer = document.getElementById('pieChartContainer');
+        pieChartContainer.insertBefore(legendContainer, pieChartContainer.firstChild);
     } else {
         // Update the data in the chart instance
         pieChartInstance.data.datasets[0].data = [stoppagePercentage, workPercentage];
         pieChartInstance.update();
+
+        // Update the custom legend elements
+        const downtimePercentageElement = document.querySelector('.custom-legend .legend-item:first-child .legend-percentage');
+        const prodTimePercentageElement = document.querySelector('.custom-legend .legend-item:last-child .legend-percentage');
+        downtimePercentageElement.textContent = `${stoppagePercentage.toFixed(2)}%`;
+        prodTimePercentageElement.textContent = `${workPercentage.toFixed(2)}%`;
     }
 }
 

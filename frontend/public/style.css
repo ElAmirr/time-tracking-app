@@ -2,11 +2,12 @@
 body {
     font-family: Arial, sans-serif;
     background-color: #f8f9fa;
-    color: #fff;
+    
 }
 
 header {
-    background-color: #333333;
+    color: #ffffff;
+    background-color: #000000ed;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -31,14 +32,18 @@ header {
 }
 
 .form-switch {
+    height: 100%;
     display: flex;
     align-items: center;
 }
 
+
+
+
 /* Unchecked state */
 .form-check-input[type="checkbox"]:checked {
-    background-color: green;
-    border-color: green;
+    background-color: rgb(218, 20, 20);
+    border-color: rgb(218, 20, 20);
 }
 
 /* Checked state */
@@ -49,15 +54,15 @@ header {
 
 /* Slider appearance */
 .form-check-input[type="checkbox"] {
-width: 50px; /* Adjust width as needed */
-height: 25px; /* Adjust height as needed */
+width: 7vw; /* Adjust width as needed */
+height: 70%; /* Adjust height as needed */
 border-radius: 15px; /* Adjust border radius for rounded corners */
 transition: background-color 0.3s, border-color 0.3s; /* Smooth transition */
 }
 
 /* Custom styling for the switch label */
 .form-check-label {
-    margin-left: 20px;
+    margin-left: 40px;
 }
 
 .stop-reason-pop-up {
@@ -200,11 +205,54 @@ bottom: 30%;
     bottom: 60px; /* Display table just above the bottom bar when open */
 }
 
+
 #pieChartContainer,
 #columnChartContainer {
+    flex-direction: column;
     margin-top: 20px;
+    justify-content: space-between;
+    display: flex;
+    width: 100%;
 }
 
 .chart-container {
     margin-bottom: 20px;
+    max-width: 80%;
+}
+
+.custom-legend {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    width: 100%;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    border-radius: 20px;
+    background-color: #f5f5f5;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
+
+.legend-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.legend-circle {
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    margin-right: 8px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.legend-percentage {
+    font-family: 'Roboto', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    color: #333;
 }
