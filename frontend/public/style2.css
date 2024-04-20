@@ -1,4 +1,5 @@
 .slide-button-container {
+    width: 100%;
     display: flex;
     align-items: center;
 }
@@ -55,11 +56,29 @@ input:checked + .slider:before {
     color: #fff; /* White text color */
 }
 
-.stopwatch {
-    font-size: 24px;
-    color: #fff; /* White text color */
-    background-color: #333; /* Dark background color */
-    padding: 10px 20px;
-    border-radius: 5px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
+#stopwatch {
+    font-size: 2rem;
+    font-weight: bold;
+    padding: 1px 20px;
+    border-radius: 10px;
+    background-color: rgb(218, 20, 20); /* Red background */
+    color: white; /* White text color */
+  }
+  
+  #stopwatch.blink {
+    animation: blink 2s infinite;
+  }
+  
+  @keyframes blink {
+    0% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.5;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
+  
+  
