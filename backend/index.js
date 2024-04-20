@@ -1,6 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const path = require('path');
+const sqlite3 = require('sqlite3').verbose();
 
 // Create Express application
 const app = express();
@@ -18,6 +19,35 @@ const users = [
   { username: 'admin', password: 'admin123', role: 'admin' }
 ];
 
+const databasePath = path.join(__dirname, 'database.db');
+// SQLite database setup
+const db = new sqlite3.Database(databasePath);
+
+// Create table if not exists
+db.run(`
+    CREATE TABLE IF NOT EXISTS stoppage_log (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        time_of_stop TEXT,
+        duration TEXT,
+        reason TEXT,
+        custom_reason TEXT
+    )
+`);
+
+// Insert data into the stoppage_log table
+function insertStoppageLogEntry(entry) {
+  db.run(`
+      INSERT INTO stoppage_log (time_of_stop, duration, reason, custom_reason)
+      VALUES (?, ?, ?, ?)
+  `, [entry.timeOfStop, entry.duration, entry.reason, entry.customReasonText], (err) => {
+      if (err) {
+          console.error(err.message);
+      } else {
+          console.log('Data inserted into stoppage_log table.');
+      }
+  });
+}
+
 // UI route for login page
 app.get('/login', (req, res) => {
     res.sendFile(path.join(publicPath, 'login.html'));
@@ -31,7 +61,6 @@ app.get('/admin_dashboard', (req, res) => {
     res.sendFile(path.join(publicPath, 'admin_dashboard.html'));
 })
 
-
 // Authentication route
 app.post('/login', (req, res) => {
   const { username, password } = req.body;
@@ -43,12 +72,12 @@ app.post('/login', (req, res) => {
   }
 });
 
-// Production recording route
-app.post('/production', (req, res) => {
-  const { machineId, unitsProduced } = req.body;
-  // Perform production recording logic here
-  res.json({ success: true, message: 'Production recorded successfully' });
-});
+// Route to receive stoppage data and insert into the database
+app.post('/logStoppage', (req, res) => {
+  const entry = req.body;
+  insertStoppageLogEntry(entry);
+  res.json({ success: true, message: 'Stoppage data logged successfully' });
+})
 
 // Start the server
 const PORT = process.env.PORT || 3000;

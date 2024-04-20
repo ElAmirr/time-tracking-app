@@ -136,6 +136,7 @@ function logStoppage() {
     }
 }
 
+
 function updateStoppageLogTable() {
     const stoppageLogTable = document.getElementById('stoppageLogTable');
     stoppageLogTable.innerHTML = '';
@@ -146,10 +147,36 @@ function updateStoppageLogTable() {
             <td>${entry.duration}</td>
             <td>${entry.reason}</td>
             <td>${entry.customReasonText}</td>
-            `;
-            stoppageLogTable.appendChild(row);
+        `;
+        stoppageLogTable.appendChild(row);
+
+        // Prepare the data to send
+        const stoppageData = {
+            timeOfStop: entry.timeOfStop,
+            duration: entry.duration,
+            reason: entry.reason,
+            customReasonText: entry.customReasonText
+        };
+
+        // Send a POST request to the server
+        fetch('/logStoppage', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(stoppageData)
+        })
+        .then(response => {
+            if (!response.ok) {
+                console.error('Failed to send data');
+            }
+        })
+        .catch(error => {
+            console.error('Network error:', error);
+        });
     });
 }
+
 
 function renderCharts() {
     // Render both pie chart and column chart
@@ -267,5 +294,33 @@ function toggleBottomBar() {
     }
 }
 
+// send data to db
+const stoppageData = {
+    timeOfStop: '12:00 PM',
+    duration: '00:05:30',
+    reason: 'Technical issues',
+    customReasonText: 'Machine malfunction'
+};
+
+fetch('/logStoppage', {
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(stoppageData)
+})
+.then(response => {
+    if (response.ok) {
+        // Handle success
+        console.log('Data sent successfully');
+    } else {
+        // Handle error
+        console.error('Failed to send data');
+    }
+})
+.catch(error => {
+    // Handle network error
+    console.error('Network error:', error);
+});
 
 startClock();
