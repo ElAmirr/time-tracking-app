@@ -35,7 +35,7 @@ function startClock() {
                 currentTimeElement.textContent = currentTime;
                 currentDateElement.textContent = currentDate;
             }, 1000);
-        }
+}
 
         
 // Rest of the code remains the same
@@ -137,37 +137,12 @@ function logStoppage() {
         stoppageLog.push({ timeOfStop, duration, reason, customReasonText });
         renderCharts(); // Update the charts after logging the stoppage and calculating the duration
         updateStoppageLogTable();
-    }
-}
-
-
-function updateStoppageLogTable() {
-    const stoppageLogTable = document.getElementById('stoppageLogTable');
-    stoppageLogTable.innerHTML = '';
-    stoppageLog.forEach(entry => {
-        const row = document.createElement('tr');
-        row.innerHTML = `
-            <td>${entry.timeOfStop}</td>
-            <td>${entry.duration}</td>
-            <td>${entry.reason}</td>
-            <td>${entry.customReasonText}</td>
-        `;
-        stoppageLogTable.appendChild(row);
-
         // send data to db
         let stoppageData = {
-            timeOfStop: '',
-            duration: '',
-            reason: '',
-            customReasonText: ''
-        };
-
-        // Update the stoppageData object
-        stoppageData = {
-            timeOfStop: entry.timeOfStop,
-            duration: entry.duration,
-            reason: entry.reason,
-            customReasonText: entry.customReasonText
+            timeOfStop: timeOfStop,
+            duration: duration,
+            reason: reason,
+            customReasonText: customReason
         };
 
         // Send a POST request to the server
@@ -186,6 +161,22 @@ function updateStoppageLogTable() {
         .catch(error => {
             console.error('Network error:', error);
         });
+    }
+}
+
+
+function updateStoppageLogTable() {
+    const stoppageLogTable = document.getElementById('stoppageLogTable');
+    stoppageLogTable.innerHTML = '';
+    stoppageLog.forEach(entry => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+            <td>${entry.timeOfStop}</td>
+            <td>${entry.duration}</td>
+            <td>${entry.reason}</td>
+            <td>${entry.customReasonText}</td>
+        `;
+        stoppageLogTable.appendChild(row);
     });
 }
 
@@ -371,26 +362,5 @@ function toggleBottomBar() {
     }
 }
 
-
-fetch('/logStoppage', {
-    method: 'POST',
-    headers: {
-        'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(stoppageData)
-})
-.then(response => {
-    if (response.ok) {
-        // Handle success
-        console.log('Data sent successfully');
-    } else {
-        // Handle error
-        console.error('Failed to send data');
-    }
-})
-.catch(error => {
-    // Handle network error
-    console.error('Network error:', error);
-});
-
 startClock();
+
