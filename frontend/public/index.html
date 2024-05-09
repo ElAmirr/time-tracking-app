@@ -1,16 +1,389 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Role Selection</title>
-</head>
-<body>
-    <h1>Choose Your Role</h1>
+   <html lang="en">
+   <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <button id="operatorButton">Operator</button>
-    <button id="adminButton">Admin</button>
+      <!--=============== REMIXICONS ===============-->
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/3.4.0/remixicon.css" crossorigin="">
 
-    <script src="./script.js"></script>
-</body>
+      <!--=============== CSS ===============-->
+      <link rel="stylesheet" href="assets/css/styles.css">
+      <title>Downtime Calculator</title>
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css">
+      <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+      <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+      <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+      <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+      <script src="https://cdn.canvasjs.com/canvasjs.min.js"></script>
+      <link rel="stylesheet" href="style2.css">
+      <link rel="stylesheet" href="style.css">
+      <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@700&display=swap" rel="stylesheet">
+   </head>
+   <body>
+      <!-- Sidebar bg -->
+      
+
+      <!--=============== HEADER ===============-->
+      <header class="header">
+         <div class="header__toggle__container">
+            <div class="header__toggle" id="header-toggle">
+               <i class="ri-menu-line"></i>
+            </div>
+      </div>
+      <div class="About-user">
+        <img src="assets/img/perfil.png" alt="sidebar image" class="sidebar__perfil">
+        <div class="user-infos">
+           <h3 class="user__name">Oussama jomaa</h3>
+           <span class="user__role">Operator</span>
+        </div> 
+        <div class="machine-id">
+           <span class="machine-id__label">Machine ID</span>
+           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-gear-fill" viewBox="0 0 16 16">
+              <path d="M11.844 3.552a4.5 4.5 0 0 0-.84-.84l-1.5-.75a.5.5 0 0 0-.564.064l-1.927 1.446a4.52 4.52 0 0 0-1.454-.784L5.46 1.77a.5.5 0 0 0-.064-.564l-.75-1.5a.5.5 0 0 0-.925 0l-.75 1.5a.5.5 0 0 0-.064.564l1.446 1.927a4.52 4.52 0 0 0-.784 1.454l-1.446 1.927a.5.5 0 0 0-.064.564l.75 1.5a.5.5 0 0 0 .564.064l1.927-1.446a4.52 4.52 0 0 0 1.454.784l-1.927 1.446a.5.5 0 0 0-.564.064l-.75 1.5a.5.5 0 0 0 .925 0l.75-1.5a.5.5 0 0 0 .064-.564l-1.446-1.927a4.52 4.52 0 0 0-.784-1.454l1.927-1.446a.5.5 0 0 0 .564-.064l.75.75a4.5 4.5 0 0 0 .84.84l.75.75a.5.5 0 0 0 .925 0l.75-.75a4.5 4.5 0 0 0 .84-.84l.75-.75a.5.5 0 0 0 0-.925l-.75-.75zm-5.42 2.882L4.707 6.293a3 3 0 0 1-1.414-1.414L5.422 3.41a3 3 0 0 1 1.414 1.414zm3.536 0a3 3 0 0 1 1.414-1.414l1.415-1.415a3 3 0 0 1-1.414 1.414L10.96 6.293z"/>
+           </svg>
+           <span class="machine-id__number">Lectra 1</span>
+        </div>
+     </div>
+           
+      <div class="user-details-container">
+        <div class="user-container">
+            <div class="user-info">
+                <svg class="user-icon" viewBox="0 0 24 24">
+                    <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
+                </svg>
+                <p id="user-name"></p>
+            </div>
+            <div class="user-info">
+                <svg class="role-icon" viewBox="0 0 24 24">
+                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z" />
+                </svg>
+                <p id="user-role"></p>
+            </div>
+        </div>
+        <div class="date-time">
+            <div class="date-time-info">
+                <svg class="time-icon" viewBox="0 0 24 24">
+                    <path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z" />
+                </svg>
+                <p class="currentTime" id="currentTime"></p>
+            </div>
+            <div class="date-time-info">
+                <svg class="date-icon" viewBox="0 0 24 24">
+                    <path d="M9 11H7v2h2v-2zm4 0h-2v2h2v-2zm4 0h-2v2h2v-2zm2-7h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V9h14v11z" />
+                </svg>
+                <p class="currentDate" id="currentDate"></p>
+            </div>
+        </div>
+    </div>
+       
+        
+        <div class="timer-control-container">
+            <div class="slide-button-container">
+                <div class="form-check form-switch">
+                    <label class="form-check-label" for="toggleWorkState">Déclaration de Non-TRS</label> 
+                    <input class="form-check-input" style="margin-left: 12rem;" type="checkbox" role="switch" id="toggleWorkState" onclick="toggleWorkState()">
+                    <div class="stopwatch-container">
+                        <div id="stopwatch">00:00:00</div>
+                        <div class="watch-icon" id="watch-icon">
+                          <svg width="24" height="24" viewBox="0 0 24 24">
+                            <path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z" />
+                            <path d="M12.5 7H11v6l5.25 3.15.75-1.23-4.5-2.67V7z" />
+                          </svg>
+                        </div>
+                      </div>
+        </div>
+    </header>
+    <div class="stop-reason-pop-up" id="pop-up">
+        <button class="stop-reson-pop-up-close is-large" aria-label="close" onclick="closeFormReason()">X</button>
+        <form onsubmit="submitStopReason(event)">
+            <div class="form-group">
+                <ul class="nav nav-tabs" id="stopReasonTabs" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active" id="planned-stoppages-tab" data-bs-toggle="tab" data-bs-target="#planned-stoppages" type="button" role="tab" aria-controls="planned-stoppages" aria-selected="true">Arrets Plannifiées</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="pannes-tab" data-bs-toggle="tab" data-bs-target="#pannes" type="button" role="tab" aria-controls="pannes" aria-selected="false">Pannes</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="organisationnelles-tab" data-bs-toggle="tab" data-bs-target="#organisationnelles" type="button" role="tab" aria-controls="organisationnelles" aria-selected="false">Organisationnelles</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="changement-ref-tab" data-bs-toggle="tab" data-bs-target="#changement-ref" type="button" role="tab" aria-controls="changement-ref" aria-selected="false">Changement de Référence</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="non-quality-tab" data-bs-toggle="tab" data-bs-target="#non-quality" type="button" role="tab" aria-controls="non-quality" aria-selected="false">Non-Qualité</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="autres-tab" data-bs-toggle="tab" data-bs-target="#autres" type="button" role="tab" aria-controls="autres" aria-selected="false">Autres</button>
+                    </li>
+                </ul>
+                
+                <div class="tab-content" id="stopReasonTabContent">
+                    <!-- Planned Stoppages -->
+                    <div class="tab-pane fade show active" id="planned-stoppages" role="tabpanel" aria-labelledby="planned-stoppages-tab">
+                        <div class="mb-3">
+                            <label for="planned-stoppage-reason" class="form-label">Raison d'arret plannifié:</label>
+                            <select class="form-select" id="planned-stoppage-reason" name="planned-stoppage-reason">
+                                <option value="" disabled selected>Sélectionner une raison</option>
+                                <option value="Top 5">Top 5</option>
+                                <option value="Changement lame">Changement lame</option>
+                                <option value="Maintenance 1er & 2em niveau">Maintenance 1er & 2em niveau</option>
+                                <option value="Mainetance preventive">Mainetance preventive</option>
+                                <option value="Test/OK demarrage">Test/OK demarrage</option>
+                                <option value="OK 1ére piéce">OK 1ére piéce</option>
+                                <option value="Pause">Pause</option>
+                                <option value="Communication">Communication</option>
+                            </select>
+                        </div>
+                    </div>
+                    <!-- Pannes -->
+                    <div class="tab-pane fade"  id="pannes" role="tabpanel" aria-labelledby="pannes-tab">
+                        <div class="mb-3">
+                            <label for="pannes-stoppage-reason" class="form-label">Raison de la panne:</label>
+                            <select class="form-select unplanned-stoppage-reason" id="pannes-stoppage-reason" name="pannes-stoppage-reason">
+                                <option value="" disabled selected>Sélectionner une raison</option>
+                                <option value="Problème d'affûtage">Problème d'affûtage</option>
+                                <option value="Problème d'aspiration">Problème d'aspiration</option>
+                                <option value="Problème radar">Problème radar</option>
+                                <option value="Problème pied de biche">Problème pied de biche</option>
+                                <option value="Problème pertes cible">Problème pertes cible</option>
+                                <option value="Problème rotation lame">Problème rotation lame</option>
+                            </select>
+                        </div>
+                    </div>
+                    <!-- Organisationnelles -->
+                    <div class="tab-pane fade" id="organisationnelles" role="tabpanel" aria-labelledby="organisationnelles-tab">
+                        <div class="mb-3">
+                            <label for="organisationnelles-stoppage-reason" class="form-label">Raison organisationnelle:</label>
+                            <select class="form-select unplanned-stoppage-reason" id="organisationnelles-stoppage-reason" name="organisationnelles-stoppage-reason">
+                                <option value="" disabled selected>Sélectionner une raison</option>
+                                <option value="Attente Coda">Attente Coda</option>
+                                <option value="Changement Rouleau plastique">Changement Rouleau plastique</option>
+                                <option value="Rupture matière magasin">Rupture matière magasin</option>
+                                <option value="Absence Conducteur">Absence Conducteur</option>
+                                <option value="Coupure courant">Coupure courant</option>
+                                <option value="Problème CAO">Problème CAO</option>
+                                <option value="Changement de papier Craft">Changement de papier Craft</option>
+                            </select>
+                        </div>
+                    </div>
+                    <!-- Changement de Référence -->
+                    <div class="tab-pane fade" id="changement-ref" role="tabpanel" aria-labelledby="changement-ref-tab">
+                        <div class="mb-3">
+                            <label for="changement-ref-stoppage-reason" class="form-label">Raison du changement de référence:</label>
+                            <select class="form-select unplanned-stoppage-reason" id="changement-ref-stoppage-reason" name="changement-ref-stoppage-reason">
+                                <option value="" disabled selected>Sélectionner une raison</option>
+                                <option value="Absence fichier CAO">Absence fichier CAO</option>
+                                <option value="Absence matelas">Absence matelas</option>
+                                <option value="Changement drill">Changement drill</option>
+                                <option value="Changement matelas">Changement matelas</option>
+                            </select>
+                        </div>
+                    </div>
+                    <!-- Non-Qualité -->
+                    <div class="tab-pane fade" id="non-quality" role="tabpanel" aria-labelledby="non-quality-tab">
+                        <div class="mb-3">
+                            <label for="non-quality-stoppage-reason" class="form-label">Raison de non-qualité:</label>
+                            <select class="form-select unplanned-stoppage-reason" id="non-quality-stoppage-reason" name="non-quality-stoppage-reason">
+                                <option value="" disabled selected>Sélectionner une raison</option>
+                                <option value="Manque ou décalage de drills">Manque ou décalage de drills</option>
+                                <option value="Digits Collés">Digits Collés</option>
+                                <option value="Crans/Fentes NOK">Crans/Fentes NOK</option>
+                                <option value="Sens matelas NOK">Sens matelas NOK</option>
+                                <option value="Repérage NOK">Repérage NOK</option>
+                                <option value="Matelas mal alignée">Matelas mal alignée</option>
+                                <option value="Géométrie NOK">Géométrie NOK</option>
+                                <option value="Coupe irrégulière">Coupe irrégulière</option>
+                            </select>
+                        </div>
+                    </div>
+                    <!-- Autres -->
+                    <div class="tab-pane fade" id="autres" role="tabpanel" aria-labelledby="autres-tab">
+                        <div class="mb-3">
+                            <label for="autres-stoppage-reason" class="form-label">Autres raisons:</label>
+                            <select class="form-select unplanned-stoppage-reason" id="autres-stoppage-reason" name="autres-stoppage-reason">
+                                <option value="" disabled selected>Sélectionner une raison</option>
+                                <option value="Erreur capteur d'effort">Erreur capteur d'effort</option>
+                                <option value="Erreur Radar">Erreur Radar</option>
+                                <option value="Erreur rotation lame">Erreur rotation lame</option>
+                                <option value="Erreur espace de stockage">Erreur espace de stockage</option>
+                                <option value="Perte vitesse">Perte vitesse</option>
+                                <option value="Repérage Laser NOK">Repérage Laser NOK</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="stoppage-description" class="form-label">Description:</label>
+                <textarea class="form-control" id="stoppage-description" name="stoppage-description" rows="3"></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">Enregistrer</button>
+        </form>
+    </div>
+    
+   
+    
+    
+    <div class="bottom-bar">
+        <button class="toggle-button" onclick="toggleBottomBar()">
+            <svg class="toggle-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                <path d="M7 10l5 5 5-5z"/>
+                <path fill="none" d="M0 0h24v24H0z"/>
+            </svg>
+            <span class="visually-hidden">Show/Hide Details</span>
+        </button>
+        <div class="excel-table" id="excelTable">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Temp d'arret</th>
+                        <th>Durée d'arret</th>
+                        <th>Reason d'arret</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody id="stoppageLogTable">
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="chart-container">
+                    <canvas id="pieChart" width="400" height="400"></canvas>
+                    <div class="chart-labels">
+                        <p id="oeePercentage" class="percentage-label"></p>
+                        <p id="nonOeePercentage" class="percentage-label"></p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div id="columnChartContainer" class="chart-container">
+                    <div id="columnChart"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="operator_dashboard.js"></script>
+    <script>
+        function updateUnplannedStoppageReason() {
+            const plannedReason = document.getElementById('planned-stoppage-reason');
+            const unplannedReason = document.getElementById('unplanned-stoppage-reason');
+            unplannedReason.selectedIndex = 0;
+        }
+
+        function updatePlannedStoppageReason() {
+            const plannedReason = document.getElementById('planned-stoppage-reason');
+            const unplannedReason = document.getElementById('unplanned-stoppage-reason');
+            plannedReason.selectedIndex = 0;
+        }
+    </script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
+
+      <!--=============== SIDEBAR ===============-->
+      <div class="sidebar" id="sidebar">
+         <nav class="sidebar__container">
+            <div class="sidebar__logo">
+               <img src="assets/img/FRVIA.PA-c7851abe.png" alt="" class="sidebar__logo-img">
+               <img src="assets/img/logo-text.png" alt="" class="sidebar__logo-text">
+            </div>
+
+            <div class="sidebar__content">
+               <div class="sidebar__list">
+                  <a href="#" class="sidebar__link active-link">
+                     <i class="ri-home-5-line"></i>
+                     <span class="sidebar__link-name">Home</span>
+                     <span class="sidebar__link-floating">Home</span>
+                  </a>
+                  
+                  <a href="#" class="sidebar__link">
+                     <i class="ri-compass-3-line"></i>
+                     <span class="sidebar__link-name">Explore</span>
+                     <span class="sidebar__link-floating">Explore</span>
+                  </a>
+
+                  <a href="#" class="sidebar__link">
+                     <i class="ri-video-line"></i>
+                     <span class="sidebar__link-name">Shorts</span>
+                     <span class="sidebar__link-floating">Shorts</span>
+                  </a>
+
+                  <a href="#" class="sidebar__link">
+                     <i class="ri-add-box-line"></i>
+                     <span class="sidebar__link-name">Subscription</span>
+                     <span class="sidebar__link-floating">Subscription</span>
+                  </a>
+               </div>
+
+               <h3 class="sidebar__title">
+                  <span>Library</span>
+               </h3>
+
+               <div class="sidebar__list">
+                  <a href="#" class="sidebar__link">
+                     <i class="ri-history-line"></i>
+                     <span class="sidebar__link-name">History</span>
+                     <span class="sidebar__link-floating">History</span>
+                  </a>
+
+                  <a href="#" class="sidebar__link">
+                     <i class="ri-time-line"></i>
+                     <span class="sidebar__link-name">Watch Later</span>
+                     <span class="sidebar__link-floating">Watch Later</span>
+                  </a>
+
+                  <a href="#" class="sidebar__link">
+                     <i class="ri-play-circle-line"></i>
+                     <span class="sidebar__link-name">Playlists</span>
+                     <span class="sidebar__link-floating">Playlists</span>
+                  </a>
+
+                  <a href="#" class="sidebar__link">
+                     <i class="ri-heart-3-line"></i>
+                     <span class="sidebar__link-name">Liked Videos</span>
+                     <span class="sidebar__link-floating">Liked Videos</span>
+                  </a>
+               </div>
+
+               <h3 class="sidebar__title">
+                  <span>General</span>
+               </h3>
+
+               <div class="sidebar__list">
+                  <a href="#" class="sidebar__link">
+                     <i class="ri-notification-2-line"></i>
+                     <span class="sidebar__link-name">Notifications</span>
+                     <span class="sidebar__link-floating">Notifications</span>
+                  </a>
+
+                  <a href="#" class="sidebar__link">
+                     <i class="ri-settings-3-line"></i>
+                     <span class="sidebar__link-name">Settings</span>
+                     <span class="sidebar__link-floating">Settings</span>
+                  </a>
+
+                  <a href="#" class="sidebar__link">
+                     <i class="ri-logout-box-r-line"></i>
+                     <span class="sidebar__link-name">Logout</span>
+                     <span class="sidebar__link-floating">Logout</span>
+                  </a>
+               </div>
+            </div>
+
+      
+
+      <!--=============== MAIN ===============-->
+      <main class="main container" id="main">
+         <h1>Sidebar Menu</h1>
+      </main>
+      
+      <!--=============== MAIN JS ===============-->
+      <script src="assets/js/main.js"></script>
+   </body>
 </html>

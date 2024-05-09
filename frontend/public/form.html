@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Downtime Calculator</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <link rel="stylesheet" href="style2.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+ </body>
+ <form onsubmit="submitStopReason(event)">
+    <ul class="nav nav-tabs" id="stopReasonTabs" role="tablist">
+        <li class="nav-item" role="presentation">
+            <button class="nav-link active" id="planned-stoppages-tab" data-bs-toggle="tab" data-bs-target="#planned-stoppages" type="button" role="tab" aria-controls="planned-stoppages" aria-selected="true">Arrets Plannifiées</button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="unplanned-stoppages-tab" data-bs-toggle="tab" data-bs-target="#unplanned-stoppages" type="button" role="tab" aria-controls="unplanned-stoppages" aria-selected="false">Arrets Non Plannifiées</button>
+        </li>
+    </ul>
+    <div class="tab-content" id="stopReasonTabContent">
+        <div class="tab-pane fade show active" id="planned-stoppages" role="tabpanel" aria-labelledby="planned-stoppages-tab">
+            <div class="mb-3">
+                <label for="planned-stoppage-reason" class="form-label">Raison d'arret plannifié:</label>
+                <select class="form-select" id="planned-stoppage-reason" name="planned-stoppage-reason" onchange="updateUnplannedStoppageReason()">
+                    <option value="" disabled selected>Sélectionner une raison</option>
+                    <option value="Top 5">Top 5</option>
+                    <option value="Changement lame">Changement lame</option>
+                    <option value="Maintenance 1er & 2em niveau">Maintenance 1er & 2em niveau</option>
+                    <option value="Mainetance preventive">Mainetance preventive</option>
+                    <option value="Test/OK demarrage">Test/OK demarrage</option>
+                    <option value="OK 1ére piéce">OK 1ére piéce</option>
+                    <option value="Pause">Pause</option>
+                    <option value="Communication">Communication</option>
+                </select>
+            </div>
+        </div>
+        <div class="tab-pane fade" id="unplanned-stoppages" role="tabpanel" aria-labelledby="unplanned-stoppages-tab">
+            <div class="mb-3">
+                <label for="unplanned-stoppage-reason" class="form-label">Raison d'arret non plannifié:</label>
+                <select class="form-select" id="unplanned-stoppage-reason" name="unplanned-stoppage-reason" onchange="updatePlannedStoppageReason()">
+                    <option value="" disabled selected>Sélectionner une raison</option>
+                    <optgroup label="Pannes">
+                        <option value="Problème d'affûtage">Problème d'affûtage</option>
+                        <option value="Problème d'aspiration">Problème d'aspiration</option>
+                        <option value="Problème radar">Problème radar</option>
+                        <option value="Problème pied de biche">Problème pied de biche</option>
+                        <option value="Problème pertes cible">Problème pertes cible</option>
+                        <option value="Problème rotation lame">Problème rotation lame</option>
+                    </optgroup>
+                    <optgroup label="Organisationnelles">
+                        <option value="Attente Coda">Attente Coda</option>
+                        <option value="Changement Rouleau plastique">Changement Rouleau plastique</option>
+                        <option value="Rupture matière magasin">Rupture matière magasin</option>
+                        <option value="Absence Conducteur">Absence Conducteur</option>
+                        <option value="Coupure courant">Coupure courant</option>
+                        <option value="Problème CAO">Problème CAO</option>
+                        <option value="Changement de papier Craft">Changement de papier Craft</option>
+                    </optgroup>
+                    <optgroup label="Changement de Référence">
+                        <option value="Absence fichier CAO">Absence fichier CAO</option>
+                        <option value="Absence matelas">Absence matelas</option>
+                        <option value="Changement drill">Changement drill</option>
+                        <option value="Changement matelas">Changement matelas</option>
+                    </optgroup>
+                    <optgroup label="Non-Qualité">
+                        <option value="Manque ou décalage de drills">Manque ou décalage de drills</option>
+                        <option value="Digits Collés">Digits Collés</option>
+                        <option value="Crans/Fentes NOK">Crans/Fentes NOK</option>
+                        <option value="Sens matelas NOK">Sens matelas NOK</option>
+                        <option value="Repérage NOK">Repérage NOK</option>
+                        <option value="Matelas mal alignée">Matelas mal alignée</option>
+                        <option value="Géométrie NOK">Géométrie NOK</option>
+                        <option value="Coupe irrégulière">Coupe irrégulière</option>
+                    </optgroup>
+                    <optgroup label="Autres">
+                        <option value="Erreur capteur d'effort">Erreur capteur d'effort</option>
+                        <option value="Erreur Radar">Erreur Radar</option>
+                        <option value="Erreur rotation lame">Erreur rotation lame</option>
+                        <option value="Erreur espace de stockage">Erreur espace de stockage</option>
+                        <option value="Perte vitesse">Perte vitesse</option>
+                        <option value="Repérage Laser NOK">Repérage Laser NOK</option>
+                    </optgroup>
+                </select>
+            </div>
+        </div>
+    </div>
+    <div class="mb-3">
+        <label for="stoppage-description" class="form-label">Description:</label>
+        <textarea class="form-control" id="stoppage-description" name="stoppage-description" rows="3"></textarea>
+    </div>
+    <button type="submit" class="btn btn-primary">Enregistrer</button>
+</form>
+<script>
+    function updateUnplannedStoppageReason() {
+        const plannedReason = document.getElementById('planned-stoppage-reason');
+        const unplannedReason = document.getElementById('unplanned-stoppage-reason');
+        unplannedReason.selectedIndex = 0;
+    }
+
+    function updatePlannedStoppageReason() {
+        const plannedReason = document.getElementById('planned-stoppage-reason');
+        const unplannedReason = document.getElementById('unplanned-stoppage-reason');
+        plannedReason.selectedIndex = 0;
+    }
+</script>
+<script src="operator_dashboard.js"></script>
+</body>
+
+</html>

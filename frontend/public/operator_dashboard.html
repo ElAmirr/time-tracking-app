@@ -5,8 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Downtime Calculator</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://cdn.canvasjs.com/canvasjs.min.js"></script>
     <link rel="stylesheet" href="style2.css">
     <link rel="stylesheet" href="style.css">
 </head>
@@ -22,11 +27,12 @@
                 <p id="currentDate"></p>
             </div>
         </div>
+        
         <div class="timer-control-container">
             <div class="slide-button-container">
                 <div class="form-check form-switch">
                     <input class="form-check-input" type="checkbox" role="switch" id="toggleWorkState" onclick="toggleWorkState()">
-                    <label class="form-check-label" for="toggleWorkState">Pause Work</label>
+                    <label class="form-check-label" for="toggleWorkState">Déclaration de Non-TRS</label>
                 </div>
             </div>
             <div id="stopwatch">00:00:00</div>
@@ -35,26 +41,135 @@
     <div class="stop-reason-pop-up" id="pop-up">
         <button class="stop-reson-pop-up-close is-large" aria-label="close" onclick="closeFormReason()">X</button>
         <form onsubmit="submitStopReason(event)">
-            <div class="mb-3">
-                <label for="stopReason" class="form-label">Stop Reason:</label>
-                <select class="form-select" id="stopReason" name="stopReason">
-                    <option value="" disabled selected>Select or Type Reason</option>
-                    <option value="Problèmes techniques avec la machine">Problèmes techniques avec la machine</option>
-                    <option value="Pénuries de matériaux">Pénuries de matériaux</option>
-                    <option value="Maintenance">Maintenance</option>
-                    <option value="interruptions dans le flux de travail">interruptions dans le flux de travail</option>
-                    <option value="Préoccupations en matière de sécurité.">Préoccupations en matière de sécurité.</option>
-                    <option value="Controles de Qualité">Controles de Qualité</option>
-                    <option value="Facteurs environnementaux">Facteurs environnementaux</option>
-                    <option value="Erreur humaines">Erreur humaines</option>
-                </select>
+            <div class="form-group">
+                <ul class="nav nav-tabs" id="stopReasonTabs" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active" id="planned-stoppages-tab" data-bs-toggle="tab" data-bs-target="#planned-stoppages" type="button" role="tab" aria-controls="planned-stoppages" aria-selected="true">Arrets Plannifiées</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="pannes-tab" data-bs-toggle="tab" data-bs-target="#pannes" type="button" role="tab" aria-controls="pannes" aria-selected="false">Pannes</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="organisationnelles-tab" data-bs-toggle="tab" data-bs-target="#organisationnelles" type="button" role="tab" aria-controls="organisationnelles" aria-selected="false">Organisationnelles</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="changement-ref-tab" data-bs-toggle="tab" data-bs-target="#changement-ref" type="button" role="tab" aria-controls="changement-ref" aria-selected="false">Changement de Référence</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="non-quality-tab" data-bs-toggle="tab" data-bs-target="#non-quality" type="button" role="tab" aria-controls="non-quality" aria-selected="false">Non-Qualité</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="autres-tab" data-bs-toggle="tab" data-bs-target="#autres" type="button" role="tab" aria-controls="autres" aria-selected="false">Autres</button>
+                    </li>
+                </ul>
+                
+                <div class="tab-content" id="stopReasonTabContent">
+                    <!-- Planned Stoppages -->
+                    <div class="tab-pane fade show active" id="planned-stoppages" role="tabpanel" aria-labelledby="planned-stoppages-tab">
+                        <div class="mb-3">
+                            <label for="planned-stoppage-reason" class="form-label">Raison d'arret plannifié:</label>
+                            <select class="form-select" id="planned-stoppage-reason" name="planned-stoppage-reason">
+                                <option value="" disabled selected>Sélectionner une raison</option>
+                                <option value="Top 5">Top 5</option>
+                                <option value="Changement lame">Changement lame</option>
+                                <option value="Maintenance 1er & 2em niveau">Maintenance 1er & 2em niveau</option>
+                                <option value="Mainetance preventive">Mainetance preventive</option>
+                                <option value="Test/OK demarrage">Test/OK demarrage</option>
+                                <option value="OK 1ére piéce">OK 1ére piéce</option>
+                                <option value="Pause">Pause</option>
+                                <option value="Communication">Communication</option>
+                            </select>
+                        </div>
+                    </div>
+                    <!-- Pannes -->
+                    <div class="tab-pane fade"  id="pannes" role="tabpanel" aria-labelledby="pannes-tab">
+                        <div class="mb-3">
+                            <label for="pannes-stoppage-reason" class="form-label">Raison de la panne:</label>
+                            <select class="form-select unplanned-stoppage-reason" id="pannes-stoppage-reason" name="pannes-stoppage-reason">
+                                <option value="" disabled selected>Sélectionner une raison</option>
+                                <option value="Problème d'affûtage">Problème d'affûtage</option>
+                                <option value="Problème d'aspiration">Problème d'aspiration</option>
+                                <option value="Problème radar">Problème radar</option>
+                                <option value="Problème pied de biche">Problème pied de biche</option>
+                                <option value="Problème pertes cible">Problème pertes cible</option>
+                                <option value="Problème rotation lame">Problème rotation lame</option>
+                            </select>
+                        </div>
+                    </div>
+                    <!-- Organisationnelles -->
+                    <div class="tab-pane fade" id="organisationnelles" role="tabpanel" aria-labelledby="organisationnelles-tab">
+                        <div class="mb-3">
+                            <label for="organisationnelles-stoppage-reason" class="form-label">Raison organisationnelle:</label>
+                            <select class="form-select unplanned-stoppage-reason" id="organisationnelles-stoppage-reason" name="organisationnelles-stoppage-reason">
+                                <option value="" disabled selected>Sélectionner une raison</option>
+                                <option value="Attente Coda">Attente Coda</option>
+                                <option value="Changement Rouleau plastique">Changement Rouleau plastique</option>
+                                <option value="Rupture matière magasin">Rupture matière magasin</option>
+                                <option value="Absence Conducteur">Absence Conducteur</option>
+                                <option value="Coupure courant">Coupure courant</option>
+                                <option value="Problème CAO">Problème CAO</option>
+                                <option value="Changement de papier Craft">Changement de papier Craft</option>
+                            </select>
+                        </div>
+                    </div>
+                    <!-- Changement de Référence -->
+                    <div class="tab-pane fade" id="changement-ref" role="tabpanel" aria-labelledby="changement-ref-tab">
+                        <div class="mb-3">
+                            <label for="changement-ref-stoppage-reason" class="form-label">Raison du changement de référence:</label>
+                            <select class="form-select unplanned-stoppage-reason" id="changement-ref-stoppage-reason" name="changement-ref-stoppage-reason">
+                                <option value="" disabled selected>Sélectionner une raison</option>
+                                <option value="Absence fichier CAO">Absence fichier CAO</option>
+                                <option value="Absence matelas">Absence matelas</option>
+                                <option value="Changement drill">Changement drill</option>
+                                <option value="Changement matelas">Changement matelas</option>
+                            </select>
+                        </div>
+                    </div>
+                    <!-- Non-Qualité -->
+                    <div class="tab-pane fade" id="non-quality" role="tabpanel" aria-labelledby="non-quality-tab">
+                        <div class="mb-3">
+                            <label for="non-quality-stoppage-reason" class="form-label">Raison de non-qualité:</label>
+                            <select class="form-select unplanned-stoppage-reason" id="non-quality-stoppage-reason" name="non-quality-stoppage-reason">
+                                <option value="" disabled selected>Sélectionner une raison</option>
+                                <option value="Manque ou décalage de drills">Manque ou décalage de drills</option>
+                                <option value="Digits Collés">Digits Collés</option>
+                                <option value="Crans/Fentes NOK">Crans/Fentes NOK</option>
+                                <option value="Sens matelas NOK">Sens matelas NOK</option>
+                                <option value="Repérage NOK">Repérage NOK</option>
+                                <option value="Matelas mal alignée">Matelas mal alignée</option>
+                                <option value="Géométrie NOK">Géométrie NOK</option>
+                                <option value="Coupe irrégulière">Coupe irrégulière</option>
+                            </select>
+                        </div>
+                    </div>
+                    <!-- Autres -->
+                    <div class="tab-pane fade" id="autres" role="tabpanel" aria-labelledby="autres-tab">
+                        <div class="mb-3">
+                            <label for="autres-stoppage-reason" class="form-label">Autres raisons:</label>
+                            <select class="form-select unplanned-stoppage-reason" id="autres-stoppage-reason" name="autres-stoppage-reason">
+                                <option value="" disabled selected>Sélectionner une raison</option>
+                                <option value="Erreur capteur d'effort">Erreur capteur d'effort</option>
+                                <option value="Erreur Radar">Erreur Radar</option>
+                                <option value="Erreur rotation lame">Erreur rotation lame</option>
+                                <option value="Erreur espace de stockage">Erreur espace de stockage</option>
+                                <option value="Perte vitesse">Perte vitesse</option>
+                                <option value="Repérage Laser NOK">Repérage Laser NOK</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="mb-3">
-                <textarea class="form-control custom-reason-input" id="customReason" placeholder="Type Custom Reason"></textarea>
+            <div class="form-group">
+                <label for="stoppage-description" class="form-label">Description:</label>
+                <textarea class="form-control" id="stoppage-description" name="stoppage-description" rows="3"></textarea>
             </div>
-            <button type="submit" class="btn btn-primary">Submit</button>
+            <button type="submit" class="btn btn-primary">Enregistrer</button>
         </form>
     </div>
+    
+   
+    
+    
     <div class="bottom-bar">
         <button class="toggle-button" onclick="toggleBottomBar()">
             <svg class="toggle-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
@@ -81,17 +196,38 @@
     <div class="container mt-4">
         <div class="row">
             <div class="col-md-6">
-                <div id="pieChartContainer" class="chart-container">
+                <div class="chart-container">
                     <canvas id="pieChart" width="400" height="400"></canvas>
+                    <div class="chart-labels">
+                        <p id="oeePercentage" class="percentage-label"></p>
+                        <p id="nonOeePercentage" class="percentage-label"></p>
+                    </div>
                 </div>
             </div>
             <div class="col-md-6">
                 <div id="columnChartContainer" class="chart-container">
-                    <canvas id="columnChart" width="400" height="400"></canvas>
+                    <div id="columnChart"></div>
                 </div>
             </div>
         </div>
     </div>
+    
     <script src="operator_dashboard.js"></script>
+    <script>
+        function updateUnplannedStoppageReason() {
+            const plannedReason = document.getElementById('planned-stoppage-reason');
+            const unplannedReason = document.getElementById('unplanned-stoppage-reason');
+            unplannedReason.selectedIndex = 0;
+        }
+
+        function updatePlannedStoppageReason() {
+            const plannedReason = document.getElementById('planned-stoppage-reason');
+            const unplannedReason = document.getElementById('unplanned-stoppage-reason');
+            plannedReason.selectedIndex = 0;
+        }
+    </script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
+ 
 </body>
 </html>

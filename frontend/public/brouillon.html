@@ -1,0 +1,49 @@
+<div class="tab-pane fade" id="unplanned-stoppages" role="tabpanel" aria-labelledby="unplanned-stoppages-tab">
+    <div class="mb-3">
+        <label for="unplanned-stoppage-reason" class="form-label">Raison d'arret non plannifié:</label>
+        <select class="form-select" id="unplanned-stoppage-reason" name="unplanned-stoppage-reason" onchange="updatePlannedStoppageReason()">
+            <option value="" disabled selected>Sélectionner une raison</option>
+            <optgroup label="Pannes">
+                <option value="Problème d'affûtage">Problème d'affûtage</option>
+                <option value="Problème d'aspiration">Problème d'aspiration</option>
+                <option value="Problème radar">Problème radar</option>
+                <option value="Problème pied de biche">Problème pied de biche</option>
+                <option value="Problème pertes cible">Problème pertes cible</option>
+                <option value="Problème rotation lame">Problème rotation lame</option>
+            </optgroup>
+            <optgroup label="Organisationnelles">
+                <option value="Attente Coda">Attente Coda</option>
+                <option value="Changement Rouleau plastique">Changement Rouleau plastique</option>
+                <option value="Rupture matière magasin">Rupture matière magasin</option>
+                <option value="Absence Conducteur">Absence Conducteur</option>
+                <option value="Coupure courant">Coupure courant</option>
+                <option value="Problème CAO">Problème CAO</option>
+                <option value="Changement de papier Craft">Changement de papier Craft</option>
+            </optgroup>
+            <optgroup label="Changement de Référence">
+                <option value="Absence fichier CAO">Absence fichier CAO</option>
+                <option value="Absence matelas">Absence matelas</option>
+                <option value="Changement drill">Changement drill</option>
+                <option value="Changement matelas">Changement matelas</option>
+            </optgroup>
+            <optgroup label="Non-Qualité">
+                <option value="Manque ou décalage de drills">Manque ou décalage de drills</option>
+                <option value="Digits Collés">Digits Collés</option>
+                <option value="Crans/Fentes NOK">Crans/Fentes NOK</option>
+                <option value="Sens matelas NOK">Sens matelas NOK</option>
+                <option value="Repérage NOK">Repérage NOK</option>
+                <option value="Matelas mal alignée">Matelas mal alignée</option>
+                <option value="Géométrie NOK">Géométrie NOK</option>
+                <option value="Coupe irrégulière">Coupe irrégulière</option>
+            </optgroup>
+            <optgroup label="Autres">
+                <option value="Erreur capteur d'effort">Erreur capteur d'effort</option>
+                <option value="Erreur Radar">Erreur Radar</option>
+                <option value="Erreur rotation lame">Erreur rotation lame</option>
+                <option value="Erreur espace de stockage">Erreur espace de stockage</option>
+                <option value="Perte vitesse">Perte vitesse</option>
+                <option value="Repérage Laser NOK">Repérage Laser NOK</option>
+            </optgroup>
+        </select>
+    </div>
+</div>
